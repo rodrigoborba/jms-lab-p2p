@@ -23,7 +23,7 @@ public class ClinicalsApp {
 		Queue replyQueue = (Queue) initialContext.lookup("queue/replyQueue");
 
 		try (ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory();
-				JMSContext jmsContext = cf.createContext("clinicaluser","clinicalpass")) {
+				JMSContext jmsContext = cf.createContext()) {
 
 			JMSProducer producer = jmsContext.createProducer();
 

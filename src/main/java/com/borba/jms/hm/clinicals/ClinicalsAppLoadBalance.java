@@ -1,10 +1,8 @@
 package com.borba.jms.hm.clinicals;
 
-import javax.jms.JMSConsumer;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.JMSProducer;
-import javax.jms.MapMessage;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.InitialContext;
@@ -20,10 +18,9 @@ public class ClinicalsAppLoadBalance {
 
 		InitialContext initialContext = new InitialContext();
 		Queue requestQueue = (Queue) initialContext.lookup("queue/requestQueue");
-		Queue replyQueue = (Queue) initialContext.lookup("queue/replyQueue");
 
 		try (ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory();
-				JMSContext jmsContext = cf.createContext("clinicaluser","clinicalpass")) {
+				JMSContext jmsContext = cf.createContext()) {
 
 			JMSProducer producer = jmsContext.createProducer();
 
@@ -38,13 +35,10 @@ public class ClinicalsAppLoadBalance {
 
 			producer.send(requestQueue, objectMessage);
 			
-//			for (int i = 1; i <= 10; i++) {
-//				producer.send(requestQueue, objectMessage);
-//			}
+			for (int i = 1; i <= 10; i++) {
+				producer.send(requestQueue, objectMessage);
+			}
 
-			JMSConsumer consumer = jmsContext.createConsumer(replyQueue);
-			MapMessage replyMessage = (MapMessage) consumer.receive(30000);
-			System.out.println("Patient eligibility is:" + replyMessage.getBoolean("eligible"));
 
 		}
 
