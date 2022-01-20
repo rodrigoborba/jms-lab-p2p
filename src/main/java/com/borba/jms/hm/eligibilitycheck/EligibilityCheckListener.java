@@ -23,7 +23,7 @@ public class EligibilityCheckListener implements MessageListener {
 		ObjectMessage objectMessage = (ObjectMessage) message;
 		
 		try(ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory();
-				JMSContext jmsContext = cf.createContext()) {
+				JMSContext jmsContext = cf.createContext("eligibilityuser", "eligibilitypass")) {
 			InitialContext initialContext = new InitialContext();
 			Queue replyQueue = (Queue) initialContext.lookup("queue/replyQueue");
 			
